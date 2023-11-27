@@ -2,8 +2,7 @@
 import React, { useEffect } from "react"
 
 //next
-import { useParams } from "next/navigation"
-import router from "next/router"
+import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 
 //components
@@ -15,11 +14,12 @@ import { IoDocumentOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 
 export default function AuthPage() {
+  const { push } = useRouter()
   const { authMode } = useParams()
 
   useEffect(() => {
     if (authMode !== "entrar" && authMode !== "cadastrar") {
-      router.push("/auth/entrar")
+      push("/auth/entrar")
     }
   }, [authMode])
 

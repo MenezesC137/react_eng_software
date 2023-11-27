@@ -1,5 +1,7 @@
 "use client"
 import React, { useState } from 'react'
+
+//styles
 import { IconBaseProps } from 'react-icons'
 import { FiEye, FiEyeOff, FiLock } from "react-icons/fi"
 
