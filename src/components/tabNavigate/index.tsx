@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 
 //next
 import Link from "next/link"
@@ -9,38 +9,33 @@ import { usePathname } from "next/navigation"
 import { FiEdit } from "react-icons/fi"
 import { FaRegUser, FaUser } from "react-icons/fa"
 import { PiHouseLine, PiHouseLineFill } from "react-icons/pi";
+import ModalPost from "../ModalPost"
 
 export default function TabNavigation() {
   const pathname = usePathname()  
-
-  const navigateOptions = [
-    {
-      icon: <PiHouseLine size={28} />,
-      iconSelected: <PiHouseLineFill size={28} color="#262261" />,
-      path: "/feed",
-    },
-    {
-      icon: <FiEdit size={24}/>,
-      path: "/restaurantes",
-    },
-    {
-      icon: <FaRegUser size={24}/>,
-      iconSelected: <FaUser size={24} color="#262261" />,
-      path: "/perfil",
-    },
-  ]
+  const [showModal, setShowModal] = useState(false)
 
   return (
-    <nav className="fixed bottom-0 z-[51] flex w-full justify-between rounded-t-xl bg-background-main px-4 pt-2 text-typography-light md:hidden">
-      {navigateOptions.map((option, index) => (
+    <>
+      <ModalPost show={showModal} setShow={setShowModal} />
+      <nav className="fixed bottom-0 z-40 flex w-full justify-between rounded-t-xl bg-background-main px-4 pt-5 text-typography-light md:hidden bg-white border-t  shadow-xl">
         <Link
-          href={option.path}
-          key={index}
+          href={"/feed"}
           className="flex h-14 w-14 flex-col items-center"
         >
-          {pathname === option.path ? option.iconSelected : option.icon}
+          {pathname === "/feed" ? <PiHouseLineFill size={28} color="#262261" /> :  <PiHouseLine size={28} />}
         </Link>
-      ))}
-    </nav>  
+        <button onClick={() => setShowModal(true)} className="flex h-14 w-14 flex-col items-center">
+          <FiEdit size={24}/>
+        </button>
+        <Link
+          href={"/perfil"}
+          className="flex h-14 w-14 flex-col items-center"
+        >
+          {pathname === "/perfil" ? <FaUser size={28} color="#262261" /> :  <FaRegUser size={28} />}
+        </Link>
+      </nav> 
+    </>
+
   )
 }
