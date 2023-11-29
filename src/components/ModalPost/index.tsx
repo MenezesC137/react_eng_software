@@ -7,10 +7,10 @@ import api_client from '@/config/api_client'
 export default function ModalPost({show, setShow} : {show: boolean, setShow: Function}) {
 
   const {currentUser} = useContext(AuthContext)
+  
   const [post , setPost] = useState({
     title: "",
-    description: "",
-    user_id: currentUser.id,
+    content: "",
   })
 
   const { token } = parseCookies()
@@ -18,8 +18,8 @@ export default function ModalPost({show, setShow} : {show: boolean, setShow: Fun
   async function createPost() {
     await api_client.post("/posts", {
       "title": post.title,
-      "content": post.description,
-      "user_id": post.user_id,
+      "content": post.content,
+      "user_id": currentUser?.id,
     },{
       headers: {
         "Authorization": token
@@ -37,7 +37,7 @@ export default function ModalPost({show, setShow} : {show: boolean, setShow: Fun
       </header>
       <InputText placeholder='Título' onChange={e => setPost({...post, title: e.target.value})} />
       <section>
-        <textarea className='w-full h-96 outline-none border rounded-xl p-2' placeholder='Digite aqui seu post' onChange={e => setPost({...post, description: e.target.value})} />
+        <textarea className='w-full h-96 outline-none border rounded-xl p-2' placeholder='Digite aqui seu post' onChange={e => setPost({...post, content: e.target.value})} />
       </section>
       <button className="bg-[#262261] text-white rounded-md px-4 py-2 w-full" onClick={createPost}>Postar</button>  
     </div>
