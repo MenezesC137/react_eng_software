@@ -1,15 +1,26 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import TabNavigation from '@/components/tabNavigate'
 import Image from 'next/image'
 import user from '@/assets/user.png'
 import Post from '@/components/post'
 import ModalEdit from '@/components/ModalEdit'
+import { AuthContext } from '@/contexts/authContext'
+import api_client from '@/config/api_client'
 
 export default function PerfilPage() {
-
   const [tabs, setTabs] = useState<"post" | "likes" | "answer">("post")
   const [show, setShow] = useState(false)
+  const { currentUser } = useContext(AuthContext)
+  const [posts, setPosts] = useState([])  
+
+  useEffect(() => {
+    getPosts()
+  }, [])
+  
+  async function getPosts() {
+    await api_client.get('/posts').then(res => setPosts(res.data))
+  }
 
   return (
     <>
@@ -19,10 +30,10 @@ export default function PerfilPage() {
           <Image src={user} alt='user' width={60} height={60} className='h-16 w-16' />
           <aside>
             <h1 className='text-2xl font-bold'>
-              Eduardo Menezes
+              {currentUser.name || currentUser.email}
             </h1>
             <p>
-              menezes.cadu
+              {currentUser.email}
             </p>
           </aside>
         </section>
@@ -40,7 +51,7 @@ export default function PerfilPage() {
           <button className={`w-full py-2 text-center font-bold mx-2 ${tabs === 'answer' && 'border-b-2'}`} onClick={() => setTabs('answer')}>Curtidas</button>
         </section>
         <div className='flex w-full flex-col border-t overflow-auto h-full pb-[80px]'>
-          <Post />
+          {posts.map((item, index) => <Post key={index} item={item} />)}
         </div>
         <TabNavigation />
       </main>
